@@ -17,36 +17,35 @@ from sklearn.metrics import confusion_matrix,plot_confusion_matrix
 
 
 model = Sequential()
-# model.add(Embedding(max_features, embedding_size, input_length=maxlen))
-model.add(Reshape((1,50,50,3)))
-model.add(TimeDistributed(Convolution2D(32, (3, 3), input_shape=(50, 50, 3), padding='valid', activation= 'relu')) )
 
-model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2))))
+model.add((Convolution2D(32, (3, 3), input_shape=(50, 50, 3), padding='valid', activation= 'relu')) )
 
-model.add(TimeDistributed(Convolution2D(48, (3, 3), padding='valid',activation= 'relu')))
-model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2))))
+model.add((MaxPooling2D(pool_size=(2, 2))))
 
-model.add(TimeDistributed(Convolution2D(64, (3, 3), padding='valid',activation= 'relu')))
-model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2))))
+model.add((Convolution2D(48, (3, 3), padding='valid',activation= 'relu')))
+model.add((MaxPooling2D(pool_size=(2, 2))))
 
-model.add(TimeDistributed(Convolution2D(96, (3, 3), padding='valid',activation= 'relu')))
-model.add(TimeDistributed(MaxPooling2D(pool_size=(2, 2))))
+model.add((Convolution2D(64, (3, 3), padding='valid',activation= 'relu')))
+model.add((MaxPooling2D(pool_size=(2, 2))))
 
-model.add(TimeDistributed(Flatten()))
-model.add(Bidirectional(LSTM(200,return_sequences=True)))
+model.add((Convolution2D(96, (3, 3), padding='valid',activation= 'relu')))
+model.add((MaxPooling2D(pool_size=(2, 2))))
+
+model.add((Flatten()))
+model.add(Dense(256))
 model.add(Dropout(0.25))
-model.add(Bidirectional(LSTM(200,return_sequences=False)))
+model.add(Activation('relu'))
 model.add(Dropout(0.5))
 model.add(Dense(1, activation='linear'))
 model.compile(optimizer='adam', loss='mse')
 train_datagen=ImageDataGenerator(preprocessing_function=preprocess_input) #included in our dependencies
 test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
-label = pd.read_csv("^GSPC.csv", delimiter=',', names=['id', 'y_val'],header= 0)
-label_t = pd.read_csv("^GSPC_t.csv", delimiter=',', names=['id', 'y_val'],header= 0)
+label = pd.read_csv("AAPL.csv", delimiter=',', names=['id', 'y_val'],header= 0)
+label_t = pd.read_csv("AAPL_t.csv", delimiter=',', names=['id', 'y_val'],header= 0)
 print(label)
 train_generator=train_datagen.flow_from_dataframe(dataframe = label , directory='Train', x_col="id", y_col="y_val", has_ext=True,
                                               class_mode="other", target_size=(50, 50 ),
-                                              batch_size=32,shuffle=False)
+                                              batch_size=32,shuffle=True)
 test_generator=test_datagen.flow_from_dataframe(dataframe = label_t , directory='Test', x_col="id", y_col="y_val", has_ext=True,
                                           class_mode="other", target_size=(50, 50 ),
                                               batch_size=32,shuffle=False)

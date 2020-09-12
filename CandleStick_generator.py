@@ -19,7 +19,7 @@ my_headers = ['date', 'open', 'high', 'low', 'close','adj close','volume']
 my_dtypes = {'date': 'str', 'open': 'float', 'high': 'float', 'low': 'float',
              'close': 'float', 'volume': 'int'}
 my_parse_dates = ['date']
-name = '^GSPC_test'
+name = 'AAPL_test'
 loaded_data = pd.read_csv('Data/' + name+ '.csv', sep=',', header=1, names=my_headers,
                           dtype=my_dtypes, parse_dates=my_parse_dates)
 
@@ -56,4 +56,4 @@ scaler = preprocessing.MinMaxScaler()
 scaled_values = scaler.fit_transform(np.array(df.iloc[:,1]).reshape(-1,1))
 df.iloc[:,1] = scaled_values
 
-df.to_csv("^GSPC_t.csv")
+df.to_csv("AAPL_test.csv")

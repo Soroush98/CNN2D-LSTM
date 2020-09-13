@@ -41,8 +41,8 @@ model.add(Dense(1, activation='linear'))
 model.compile(optimizer='adam', loss='mse')
 train_datagen=ImageDataGenerator(preprocessing_function=preprocess_input) #included in our dependencies
 test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
-label = pd.read_csv("^GSPC.csv", delimiter=',', names=['id', 'y_val'],header= 0)
-label_t = pd.read_csv("^GSPC_t.csv", delimiter=',', names=['id', 'y_val'],header= 0)
+label = pd.read_csv("AAPL.csv", delimiter=',', names=['id', 'y_val'],header= 0)
+label_t = pd.read_csv("AAPL_t.csv", delimiter=',', names=['id', 'y_val'],header= 0)
 print(label)
 train_generator=train_datagen.flow_from_dataframe(dataframe = label , directory='Train', x_col="id", y_col="y_val", has_ext=True,
                                               class_mode="other", target_size=(50, 50 ),
